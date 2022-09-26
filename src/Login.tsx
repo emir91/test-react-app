@@ -50,8 +50,8 @@ class Login extends React.Component<{}, CredentialState> {
         return (
             <div>
                 <form data-test="login-form" onSubmit={e => this.handleSubmit(e)}>
-                    <input type="text" name='login' value={this.state.username} onChange={e => this.setUsername(e)} /> <br/>
-                    <input type="password" name="password" value={this.state.password} onChange={e => this.setPassword(e)} />    
+                    <input role='textbox' type="text" name='username' title="username" value={this.state.username} onChange={e => this.setUsername(e)} /> <br/>
+                    <input role='textbox' type="password" name="password" title='password' value={this.state.password} onChange={e => this.setPassword(e)} />    
                     <input type="submit" value="Login" />
                 </form>
                 {loginLabel}                
