@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom/client'
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import Login  from './Login'
 import { LoginService } from './services/LoginService'
+jest.mock('./services/LoginService')
 
 describe("Login test suite", () => {
     let container: HTMLDivElement;
@@ -46,4 +47,34 @@ describe("Login test suite", () => {
         })
         expect(loginSpy).toBeCalledWith('someUser', 'somePass')
     })
+
+    test('Renders correctly status label - invalid login', async () => {        
+        loginSpy.mockResolvedValueOnce(false)
+        const inputs = container.querySelectorAll('input')
+        const submitInput = inputs[2]
+
+        fireEvent.click(submitInput)
+        await waitFor(() => {
+            expect(container.querySelector('label')).toBeInTheDocument()
+        })
+        await waitFor(() => {
+            expect(container.querySelector('label')).toHaveTextContent('Login failed')
+        })
+    })
+
+    test('Renders correctly status label - valid login', async () => {        
+        loginSpy.mockResolvedValueOnce(true)
+        const inputs = container.querySelectorAll('input')
+        const submitInput = inputs[2]
+
+        fireEvent.click(submitInput)
+        await waitFor(() => {
+            expect(container.querySelector('label')).toBeInTheDocument()
+        })
+        await waitFor(() => {
+            expect(container.querySelector('label')).toHaveTextContent('Login successful')
+        })
+
+    })
+
 })
